@@ -1,8 +1,8 @@
 # package.yaml
 name:                TextAdventureEngine
 version:             0.1.0.0
-author:              "Nombre del Estudiante 1 y Nombre del Estudiante 2"
-maintainer:          "estudiante1@usb.ve, estudiante2@usb.ve"
+author:              "Gabriel De Ornelas 1 y Nombre del Estudiante 2"
+maintainer:          "15-10377@usb.ve, estudiante2@usb.ve"
 
 extra-source-files:
 - README.md

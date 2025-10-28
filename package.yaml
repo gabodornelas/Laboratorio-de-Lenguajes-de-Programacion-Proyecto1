@@ -1,7 +1,7 @@
 # package.yaml
 name:                TextAdventureEngine
 version:             0.1.0.0
-author:              "Gabriel De Ornelas 1 y Nombre del Estudiante 2"
+author:              "Gabriel De Ornelas y Nombre del Estudiante 2"
 maintainer:          "15-10377@usb.ve, estudiante2@usb.ve"
 
 extra-source-files:

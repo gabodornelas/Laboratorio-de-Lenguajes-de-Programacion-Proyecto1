@@ -4,7 +4,7 @@ import Engine.Types
 
 -- Carga el archivo del mundo.
 -- Devuelve (IO (Either Error (MapaDeSalas, MapaDeItems)))
-loadWorldData :: FilePath -> IO (Either String (RoomContainer, ItemContainer))
+loadWorldData :: FilePath -> IO (Either String (RoomName, ItemName))
 loadWorldData filePath = do
   -- Pista: usa 'readFile' para leer el archivo.
   -- Luego, parsea el contenido.

@@ -3,20 +3,22 @@ import qualified Data.Map as Map
 
 -- Direcciones posibles
 data Direction = Norte | Este | Oeste | Sur -- -> Devuelve Nothing si usa con Maybe
+      deriving (Show, Eq, Ord)
 
 -- Un objeto en el juego
 data Item = Item {
       itemName :: String,
       itemDescription :: String
-}
+}     deriving (Show, Eq)
 
 -- Una sala en el juego
 data Room = Room {
-      roomId :: Integer, -- Seria bueno supongo, para buscarlo en tal caso
+      roomID :: String,
       roomDescription :: String,
-      roomExits :: Maybe (Map.Map Direction Room), -- Asi tenemos par clave valor, para poder tener las direcciones con su room asociad. Coloque Maybe para probar en el main
+      roomExits :: [(Map.Map Direction Room)], -- Asi tenemos par clave valor, para poder tener las direcciones con su room asociad. Coloque Maybe para probar en el main
       roomItems :: [Item]
-} -- Hay que buscar la forma de que sea por referencia, para que la misma Room que se encuentra en el Map sea el que se encuentra en world
+}     deriving (Show, Eq)
+-- Hay que buscar la forma de que sea por referencia, para que la misma Room que se encuentra en el Map sea el que se encuentra en world
 
 -- El estado completo del juego
 data GameState = GameState {
@@ -34,5 +36,5 @@ data Command -- Hay que tomar en cuenta unas variantes ligeras que salen en el e
       | Salir
 
 -- Placeholders para loadWorldData
-type RoomName = ()
-type ItemName = ()
+type RoomContainer = [Room]
+type ItemContainer = [Item]

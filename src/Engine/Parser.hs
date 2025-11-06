@@ -8,7 +8,7 @@ parseCommand input = case words input of
   [x] | x == "mirar" -> Just Mirar
       | x == "inventario" -> Just Inventario 
       | x == "salir" -> Just Salir
-  ("tomar": name) | not (null name) -> Just (Tomar (Item (unwords name) "Sin descripción"))
+  ("tomar": name) | not (null name) -> Just (Tomar (Item (unwords name) "Sin descripcion"))
   ("ir": direction) | not (null direction) -> 
     case map toLower (unwords direction) of
       "norte" -> Just (Ir Norte)

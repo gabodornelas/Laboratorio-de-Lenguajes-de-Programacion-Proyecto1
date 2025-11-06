@@ -5,60 +5,54 @@ import Engine.Types
 import Engine.Parser
 import Engine.Core
 import Engine.Persistence
-import System.IO
+import System.IO (hFlush, stdout)
+import System.Exit (exitFailure, exitSuccess)
+
 
 main :: IO ()
 main = do
-    -- Cargar el mundo
-    -- Manejar el resultado de la carga
-    -- Crear el estado inicial
-    -- Iniciar el bucle del juego
+    -- Cargar el mundo-----------------------------------------------
+    world <- loadWorldData "mundo.txt"
 
-    -- Mundo de ejemplo. Porque hara falta Persistence. Por ahora toca directo en codigo
-    -- Item inicial correcto
-    let item1 = Item {
-        itemName = "item1",
-        itemDescription = "Item de prueba"
-    }
+    -- Manejar el resultado de la carga-------------------------------
+    case world of
+        Left err -> do
+            putStrLn ("Error de parseo: " ++ err)
+            exitFailure
+        Right (rooms, items) -> do
+            putStrLn "Éxito"
+            -- mapM_ print items
+            -- mapM_ print rooms
+            -- Crear el estado inicial--------------------------------
+            let mapa = foldr Map.union Map.empty (roomExits (rooms !! 0))
+            -- Estado inicial
+            let state = GameState {
+                room = rooms !! 0,
+                inventory = [],
+                world = rooms
+            }
+            
+            -- Iniciar el bucle del juego-----------------------------
+            gameLoop state
 
-    -- Inicial room necesita de algo, tengo problmeas aqui con
-    let initialRoom = Room {
-        roomId = 1,
-        roomDescription = "Primer cuarto",
-        roomItems = [item1],
-        roomExits = Just Map.empty
-    }
-
-    -- Creacion de mapa, por dedcirlo de una forma, el grafo
-    let mapa = Map.fromList [("norte", initialRoom)]
-
-    -- Estado inicial
-    let state = GameState {
-        room = initialRoom,
-        inventory = [item1],
-        world = [initialRoom]
-    }
-
-    gameLoop state
-
-
--- El bucle principal del juego
+-- El bucle principal del juego----------------------------
 gameLoop :: GameState -> IO ()
 gameLoop state = do
-    -- Parsear la entrada del usuario a un Command
-    -- Si hay error, continuar con el mismo estado
-    -- Procesar el comando
-    -- Mostrar resultado
-    -- Continuar el bucle con el nuevo estado
-
-
-    putStrLn "> "
+    putStrLn "Ingrese un comando en minusculas: mirar, ir <direccion>, tomar <objeto>, inventario, salir"
+    putStr "> "
+    hFlush stdout
     input <- getLine
-    putStrLn ("Comando introducido: " ++ input) 
-    case parseCommand input of -- solo me funciono con minusculas (Correrig luego para todo tipo en Parser)
-        Just dir -> do 
-            putStrLn ("Direccion reconocida")
-            let (mensaje, estado) = processCommand dir state
+    putStrLn ""
+    case parseCommand input of 
+        Just Salir -> do
+            let (mensaje, estado) = processCommand Salir state
             putStrLn mensaje
-        Nothing  -> putStrLn "No se reconoció la dirección"
+            exitSuccess
+        Just command -> do 
+            let (mensaje, estado) = processCommand command state
+            putStrLn mensaje
+            gameLoop estado
+        Nothing  -> do
+            putStrLn "No se reconocio el comando."
+            gameLoop state
 

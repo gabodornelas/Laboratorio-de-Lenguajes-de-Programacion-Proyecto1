@@ -78,7 +78,7 @@ parseRoom mapaItems parts = case words parts of
     let (nameRoom, descRoom) = break (== "DESC:") rest
         (fullDescRoom,exit) = break (== "SALIDA:") (drop 1 descRoom)
         (allExits,allObjects) = break (== "OBJETO:") exit
-        exits = [Map.singleton dir name | (dir, name) <- (findExits (drop 1 allExits))]
+        exits = [Map.singleton dir name | (dir, name) <- (findExits (drop 1 allExits))] -- Convierte a Map.Map todas las tuplas de findExits
         objectsNames = findObjects (drop 1 allObjects)
         objects = [item | name <- objectsNames, item <- mapaItems, itemName item == name] -- Convierte la lista de nombres de item en lista de items
     in Room { 

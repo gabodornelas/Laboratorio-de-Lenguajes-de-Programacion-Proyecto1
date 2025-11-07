@@ -14,7 +14,7 @@ processCommand Mirar state =
       exitsList = roomExits currentRoom
       fullMap = foldr Map.union Map.empty exitsList
       dirs = Map.keys fullMap
-      itemsMsg = if null items then "(ninguno)" else intercalate ", " (map itemName items)
+      itemsMsg = if null items then "(ninguno)" else intercalate ", " (map (\item -> itemName item ++ " (" ++ itemDescription item ++ ")") items)
       msg = unlines ["Sala: " ++ roomName,
                      "Descripcion: " ++ desc,
                      "Objetos: " ++ itemsMsg]

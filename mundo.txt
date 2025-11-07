@@ -4,10 +4,14 @@ DESC: Unas llaves brillantes.
 ITEM: cuchillo
 DESC: Un cuchillo afilado.
 ---
+ITEM: pala
+DESC: Una pala para palear.
+---
 SALA: Sala de Estar
 DESC: Una acogedora sala de estar. Hay una puerta al norte.
 SALIDA: Norte -> Cocina
 OBJETO: llaves
+OBJETO: pala
 ---
 SALA: Cocina
 DESC: Una cocina desordenada. Hay una puerta al sur.

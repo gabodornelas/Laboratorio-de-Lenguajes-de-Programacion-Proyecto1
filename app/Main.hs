@@ -20,7 +20,7 @@ main = do
             putStrLn ("Error de parseo: " ++ err)
             exitFailure
         Right (rooms, items) -> do
-            putStrLn "Éxito"
+            putStrLn "El mundo se cargo con éxito"
             -- mapM_ print items
             -- mapM_ print rooms
             -- Crear el estado inicial--------------------------------
@@ -38,6 +38,7 @@ main = do
 -- El bucle principal del juego----------------------------
 gameLoop :: GameState -> IO ()
 gameLoop state = do
+    putStrLn ""
     putStrLn "Ingrese un comando en minusculas: mirar, ir <direccion>, tomar <objeto>, inventario, salir"
     putStr "> "
     hFlush stdout

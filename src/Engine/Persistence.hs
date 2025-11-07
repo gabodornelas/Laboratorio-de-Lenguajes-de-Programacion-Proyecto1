@@ -4,17 +4,6 @@ import qualified Data.Map as Map
 import Data.Char (toLower)
 import Engine.Types
 
-
--------------------------------------------------------------------------------------------------
--- data intermedia para tener los nombres de todas las salas antes de direccionarlas a Room
-
-data Salon = Salon {
-      salonID :: String,
-      salonDescription :: String,
-      salonExits :: [(Direction, String)],
-      salonItems :: [Item]
-}
-
 ----------------------------------------------------------------------------------------------------
 -- Funcion que separa el string items o rooms dividiendolo en cada '---' lo que denota un nuevo
 --    elemento y devuelve cada parte como elemento de una lista
@@ -80,40 +69,24 @@ parseItem parts = case words parts of
 
 ----------------------------------------------------------------------------------------------------------
 -- Funcion que convierte un String (que viene como un elemento de una lista) y parsea su contenido
---    para crear un salon
+--    para crear un room
 -- Los break van separando el contenido por descripcion, salida, objeto
 
-parseRoom :: [Item] -> String -> Salon
+parseRoom :: [Item] -> String -> Room
 parseRoom mapaItems parts = case words parts of
   ("SALA:":rest) ->
     let (nameRoom, descRoom) = break (== "DESC:") rest
         (fullDescRoom,exit) = break (== "SALIDA:") (drop 1 descRoom)
         (allExits,allObjects) = break (== "OBJETO:") exit
-        exits = findExits (drop 1 allExits)
+        exits = [Map.singleton dir name | (dir, name) <- (findExits (drop 1 allExits))]
         objectsNames = findObjects (drop 1 allObjects)
         objects = [item | name <- objectsNames, item <- mapaItems, itemName item == name] -- Convierte la lista de nombres de item en lista de items
-    in Salon { 
-              salonID = unwords nameRoom,
-              salonDescription = unwords fullDescRoom,
-              salonExits = exits,
-              salonItems = objects
+    in Room { 
+              roomID = unwords nameRoom,
+              roomDescription = unwords fullDescRoom,
+              roomExits = exits,
+              roomItems = objects
               }
-
----------------------------------------------------------------------------------------------------
--- Funcion que direcciona las room hacia otras room ya teniendo la lista de las room existentes
-
-direccionaRoom :: [Salon] -> Salon -> Room
-direccionaRoom salones salon =
-  let exits = [Map.singleton dir room | (dir, name) <- salonExits salon,
-                                          s <- salones, salonID s == name,
-                                          let room = Room (salonID s) (salonDescription s) [] (salonItems s)]
-  in Room {
-          roomID = salonID salon,
-          roomDescription = salonDescription salon,
-          roomExits = exits,
-          roomItems = salonItems salon
-          }
-
 
 ------------------------------------------------------------------------------------------------------
 -- CARGA
@@ -131,13 +104,13 @@ loadWorldData filePath = do
       elementsItems =  breakElements items  -- Separa cada elemento de los items
       elementsRooms =  breakElements rooms  -- Separa cada elemento de los rooms
       mapaItems = map parseItem elementsItems
-      salones = map (parseRoom mapaItems) elementsRooms
-      mapaSalas = map (direccionaRoom salones) salones
+      mapaSalas = map (parseRoom mapaItems) elementsRooms
 
-  -- Si el parseo falla, devuelve (Left "Mensaje de Error")
   
+  -- Si el parseo falla, devuelve (Left "Mensaje de Error")
   if null mapaItems || null mapaSalas then
     return $ Left "Mensaje de Error"
   else
+    -- Si tiene exito, devuelve (Right (mapaSalas, mapaItems))
     return $ Right (mapaSalas, mapaItems)
-  -- Si tiene exito, devuelve (Right (mapaSalas, mapaItems))
+

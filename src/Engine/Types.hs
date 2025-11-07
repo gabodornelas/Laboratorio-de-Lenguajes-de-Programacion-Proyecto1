@@ -15,7 +15,7 @@ data Item = Item {
 data Room = Room {
       roomID :: String,
       roomDescription :: String,
-      roomExits :: [(Map.Map Direction Room)], -- Asi tenemos par clave valor, para poder tener las direcciones con su room asociad. Coloque Maybe para probar en el main
+      roomExits :: [(Map.Map Direction String)], -- Asi tenemos par clave valor, para poder tener las direcciones con su room asociad. Coloque Maybe para probar en el main
       roomItems :: [Item]
 }     deriving (Show, Eq)
 -- Hay que buscar la forma de que sea por referencia, para que la misma Room que se encuentra en el Map sea el que se encuentra en world

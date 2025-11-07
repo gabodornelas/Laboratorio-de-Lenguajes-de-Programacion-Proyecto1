@@ -41,10 +41,14 @@ processCommand (Ir direction) state =
       fullMap = foldr Map.union Map.empty exitsList
       moveRoom = Map.lookup direction fullMap
   in case moveRoom of
-       Nothing -> ("No hay encontraste salida en esa dirección.", state)
-       Just destRoom -> -- Actualizar el estado con la nueva sala
-         let newState = state { room = destRoom }
-         in ("Te diriges hacia: " ++ roomID destRoom ++ " - " ++ roomDescription destRoom, newState)
+      Nothing -> ("No hay salida en esa dirección.", state)
+      Just destRoom -> -- Actualizar el estado con la nueva sala
+        let newRoom = find (\room -> roomID room == destRoom) (world state) -- De la lista de salas, encuentra la que coincide con destRoom
+        in case newRoom of
+          Nothing ->  ("No hay salida en esa dirección.", state) 
+          Just nRoom ->
+            let newState = state { room = nRoom }
+            in  ("Te diriges hacia: " ++ roomID nRoom ++ " - " ++ roomDescription nRoom, newState)
 
 processCommand Inventario state =
   let inv = inventory state

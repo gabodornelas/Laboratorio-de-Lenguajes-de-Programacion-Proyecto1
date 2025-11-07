@@ -1,8 +1,8 @@
 # package.yaml
 name:                TextAdventureEngine
 version:             0.1.0.0
-author:              "Gabriel De Ornelas y Nombre del Estudiante 2"
-maintainer:          "15-10377@usb.ve, estudiante2@usb.ve"
+author:              "Gabriel De Ornelas y Blanyer Vielma"
+maintainer:          "15-10377@usb.ve, 16-11238@usb.ve"
 
 extra-source-files:
 - README.md

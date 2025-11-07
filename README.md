@@ -1,7 +1,7 @@
 # Tarea 1: Motor de Aventura de Texto (CI-3661)
 
-- **Nombres:** (Gabriel De Ornelas, Nombre Estudiante 2)
-- **Carnets:** (15-10377, Carnet 2)
+- **Nombres:** (Gabriel De Ornelas, Blanyer Vielma)
+- **Carnets:** (15-10377, 16-11238)
 
 ---
 

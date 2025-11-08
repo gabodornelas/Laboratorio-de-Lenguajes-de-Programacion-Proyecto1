@@ -5,9 +5,9 @@ import Engine.Types
 -- Parsea la entrada del usuario (String) a un (Maybe Command)
 parseCommand :: String -> Maybe Command
 parseCommand input = case words input of
-  [x] | x == "mirar" -> Just Mirar
-      | x == "inventario" -> Just Inventario 
-      | x == "salir" -> Just Salir
+  [x] | x == "mirar" || x == "observar" -> Just Mirar
+      | x == "inventario" || x == "inv" -> Just Inventario
+      | x == "salir" || x == "exit" -> Just Salir
   ("tomar": name) | not (null name) -> Just (Tomar (Item (unwords name) "Sin descripcion"))
   ("ir": direction) | not (null direction) -> 
     case map toLower (unwords direction) of

@@ -123,8 +123,9 @@ parseRoom mapaItems parts = case words parts of
   _ -> Left ("Error de formato, no se define bien SALA: en -> " ++ (parts))
 
 -----------------------------------------------------------------------------------------------------
--- Funcion que valida que el mundo tenga el formato
-
+-- Funcion que valida que las salas referenciadas sean salas existentes
+-- toma una por una cada lista de salidas de cada sala y revisa que la sala a la que deberia salir,
+-- sea una sala existente
 
 verificaSalas :: [Room] -> [(Map.Map Direction String)] -> Either String Bool
 verificaSalas rooms exits =
@@ -134,9 +135,6 @@ verificaSalas rooms exits =
   where
     roomIDs       = map roomID rooms
     referencedIDs = concatMap Map.elems exits
-
-
-
 
 ------------------------------------------------------------------------------------------------------
 -- CARGA

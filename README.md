@@ -34,7 +34,7 @@ Laboratorio-de-Lenguajes-de-Programacion-Proyecto1
 │   └── Engine
 │       ├── Core.hs           # Lógica pura del juego
 │       ├── Parser.hs         # Análisis y validación de comandos del usuario
-│       ├── Persistence.hs    # Manejo de guardado y carga del estado del juego
+│       ├── Persistence.hs    # Manejo carga del estado del juego
 │       └── Types.hs          # Definiciones de tipos de datos principales
 └── README.md                 # Documentación del proyecto
 ```

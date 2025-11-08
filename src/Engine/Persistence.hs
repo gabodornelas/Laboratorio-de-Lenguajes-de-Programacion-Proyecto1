@@ -25,13 +25,14 @@ parseExit str =
   let (first, rest) = break (== "->") str
       destination = unwords (drop 1 rest)
   in if null rest
-        then Left (""Error de formato, falta '->' en " ++ (unwords first))
-      case map toLower (unwords first) of
-       "norte" -> Right (Norte, destination)
-       "este"  -> Right (Este, destination)
-       "sur"   -> Right (Sur, destination)
-       "oeste" -> Right (Oeste, destination)
-       _       -> Left ("Dirección inválida: " ++ unwords first)
+        then Left ("Error de formato, falta '->' en " ++ (unwords first))
+        else
+          case map toLower (unwords first) of
+          "norte" -> Right (Norte, destination)
+          "este"  -> Right (Este, destination)
+          "sur"   -> Right (Sur, destination)
+          "oeste" -> Right (Oeste, destination)
+          _       -> Left ("Dirección inválida: " ++ unwords first)
 
 ------------------------------------------------------------------------------------------------------
 -- Funcion que recibe el elemento con objetos, separa cada objeto y los parsea a una lista
@@ -136,7 +137,7 @@ verificaSalas :: [Room] -> [(Map.Map Direction String)] -> Either String Bool
 verificaSalas rooms exits =
     case filter (`notElem` roomIDs) referencedIDs of
         []     -> Right True
-        (x:_)  -> Left ("Error de asignacion, intentas asignar la sala: " ++ x ++ ", que no fue definida\nO hubo un error de formato, no se definio bien SALIDA: \nTus salas definidas son: " ++ (intercalate ", " roomIDs) )
+        (x:_)  -> Left ("Error de asignacion, intentas asignar la sala: " ++ x ++ ", que no fue definida\nO hubo un error de formato, no se definio bien SALIDA: \nO hubo un error de formato, no se definio bien OBJETO: \nTus salas definidas son: " ++ (intercalate ", " roomIDs) )
   where
     roomIDs       = map roomID rooms
     referencedIDs = concatMap Map.elems exits

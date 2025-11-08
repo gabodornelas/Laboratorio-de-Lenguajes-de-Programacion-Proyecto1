@@ -58,7 +58,7 @@ Contiene la **lógica pura** encargada de recibir el estado del juego y un coman
 - Actualizar el estado del juego según las acciones del jugador.
 
 #### `Engine.Persistence`
-Contiene funciones para manejar la **persistencia del estado del juego**, permitiendo cargar un estado inicial desde un archivo para el modelado del mundo. En persistence se maneja:
+Contiene la **lógica pura** de las funciones para manejar la **persistencia del estado del juego**, permitiendo cargar un estado inicial desde un archivo para el modelado del mundo. En persistence se maneja:
 - Que el archivo txt del mundo venga en el formato adecuado
 - Que los objetos asignados a las salas sean objetos que fueron definidos
 - Que las salas asignadas como salidas en las salas hayan sido definidas

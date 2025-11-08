@@ -21,10 +21,8 @@ main = do
             exitFailure
         Right (rooms, items) -> do
             putStrLn "El mundo se cargo con éxito"
-            -- mapM_ print items
-            -- mapM_ print rooms
+            
             -- Crear el estado inicial--------------------------------
-            let mapa = foldr Map.union Map.empty (roomExits (rooms !! 0))
             -- Estado inicial
             let state = GameState {
                 room = rooms !! 0,

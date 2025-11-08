@@ -17,13 +17,16 @@ breakElements s = (unwords (fst element)):(breakElements (drop 1 (snd element)))
   where element = break (== "---") s
 
 --------------------------------------------------------------------------------------------------
--- Funcion que parsea cada salida a tuplas (direccion, nombre_de_sala)
+-- Funcion que parsea cada salida a tuplas (direccion, nombre_de_sala) y valida que la direccion
+--    sea correcta
 
 parseExit :: [String] -> Either String (Direction, String)
 parseExit str =
   let (first, rest) = break (== "->") str
       destination = unwords (drop 1 rest)
-  in case map toLower (unwords first) of
+  in if null rest
+        then Left (""Error de formato, falta '->' en " ++ (unwords first))
+      case map toLower (unwords first) of
        "norte" -> Right (Norte, destination)
        "este"  -> Right (Este, destination)
        "sur"   -> Right (Sur, destination)
@@ -64,6 +67,7 @@ findExits e = if "SALIDA:" `elem` e then
 -- Funcion que convierte un String (que viene como un elemento de una lista) y parsea su contenido
 --    para crear un item
 -- Los break van separando el contenido
+-- Valida que el nombre y la descripcion tengan el formato correcto
 
 parseItem :: String -> Either String Item
 parseItem parts = case words parts of
@@ -74,18 +78,19 @@ parseItem parts = case words parts of
           else if "ITEM:" `elem` descItem
                   then Left "Error de formato, no hubo buenos separadores"
                   else if null descItem
-                          then Left ("Error de formato, no se define bien DESC: en -> " ++ (unwords nameItem))
+                          then Left ("Error de formato, no se definio bien DESC: en -> " ++ (unwords nameItem))
                           else
                               Right Item {
                                           itemName = unwords nameItem,
                                           itemDescription = unwords (drop 1 descItem)
                                           }
-  _ -> Left ("Error de formato, no se define bien ITEM: en -> " ++ (parts) ++ "\nO no se define bien SALA:")
+  _ -> Left ("Error de formato, no se definio bien ITEM: en -> " ++ (parts) ++ "\nO no se definio bien SALA:")
 
 ----------------------------------------------------------------------------------------------------------
 -- Funcion que convierte un String (que viene como un elemento de una lista) y parsea su contenido
 --    para crear un room
 -- Los break van separando el contenido por descripcion, salida, objeto
+-- Valida que el nombre, la descripcion y los objetos tengan el formato correcto, las salidas se validan en 'verificaSalas'
 
 parseRoom :: [Item] -> String -> Either String Room
 parseRoom mapaItems parts = case words parts of
@@ -96,15 +101,15 @@ parseRoom mapaItems parts = case words parts of
           else if "SALA:" `elem` descRoom
                   then Left "Error de formato, no hubo buenos separadores"
                   else if null descRoom
-                          then Left ("Error de formato, no se define bien DESC: en -> " ++ (unwords nameRoom))
+                          then Left ("Error de formato, no se definio bien DESC: en -> " ++ (unwords nameRoom))
                           else
                               let (fullDescRoom,exit) = break (== "SALIDA:") (drop 1 descRoom)
                               in if null exit
-                                    then Left ("Error de formato, no se define bien SALIDA: en -> " ++ (unwords fullDescRoom) ++ "\nSi la habitacion no tiene salidas igual debes definir SALIDA: y dejarlo vacio")
+                                    then Left ("Error de formato, no se definio bien SALIDA: en -> " ++ (unwords fullDescRoom) ++ "\nSi la habitacion no tiene salidas igual debes definir SALIDA: y dejarlo vacio")
                                     else
                                         let (allExits,allObjects) = break (== "OBJETO:") exit
                                         in if null allObjects
-                                              then Left ("Error de formato, no se define bien OBJETO: en -> " ++ (unwords allExits) ++ "\nSi la habitacion no tiene objetos igual debes definir OBJETO: y dejarlo vacio")
+                                              then Left ("Error de formato, no se definio bien OBJETO: en -> " ++ (unwords allExits) ++ "\nSi la habitacion no tiene objetos igual debes definir OBJETO: y dejarlo vacio")
                                               else
                                                   case (findExits (drop 1 allExits)) of
                                                         Left err -> Left err
@@ -120,12 +125,12 @@ parseRoom mapaItems parts = case words parts of
                                                                                   roomItems = objects
                                                                                   }
                                                                   else Left ("Error de asignacion, intentas asignar objetos que no fueron definidos.\nO hubo un Error de formato, no se definio bien OBJETO:\nTus objetos definidos son: " ++ (intercalate ", " (map itemName mapaItems)) ++ "\nMientras que intentas asignar: " ++ (intercalate ", " objectsNames) )
-  _ -> Left ("Error de formato, no se define bien SALA: en -> " ++ (parts))
+  _ -> Left ("Error de formato, no se definio bien SALA: en -> " ++ (parts))
 
 -----------------------------------------------------------------------------------------------------
 -- Funcion que valida que las salas referenciadas sean salas existentes
--- toma una por una cada lista de salidas de cada sala y revisa que la sala a la que deberia salir,
--- sea una sala existente
+-- Toma una por una cada lista de salidas de cada sala y revisa que la sala a la que deberia salir,
+--    sea una sala existente
 
 verificaSalas :: [Room] -> [(Map.Map Direction String)] -> Either String Bool
 verificaSalas rooms exits =

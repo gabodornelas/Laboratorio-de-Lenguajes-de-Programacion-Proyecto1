@@ -119,7 +119,7 @@ parseRoom mapaItems parts = case words parts of
                                                                                   roomExits = exits,
                                                                                   roomItems = objects
                                                                                   }
-                                                                  else Left ("Error de asignacion, intentas asignar objetos que no fueron definidos.\nTus objetos definidos son: " ++ (intercalate ", " (map itemName mapaItems)) ++ "\nMientras que intentas asignar: " ++ (intercalate ", " objectsNames) )
+                                                                  else Left ("Error de asignacion, intentas asignar objetos que no fueron definidos.\nO hubo un Error de formato, no se definio bien OBJETO:\nTus objetos definidos son: " ++ (intercalate ", " (map itemName mapaItems)) ++ "\nMientras que intentas asignar: " ++ (intercalate ", " objectsNames) )
   _ -> Left ("Error de formato, no se define bien SALA: en -> " ++ (parts))
 
 -----------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ verificaSalas :: [Room] -> [(Map.Map Direction String)] -> Either String Bool
 verificaSalas rooms exits =
     case filter (`notElem` roomIDs) referencedIDs of
         []     -> Right True
-        (x:_)  -> Left ("Error de asignacion, intentas asignar la sala: " ++ x ++ ", que no fue definida\nTus salas definidas son: " ++ (intercalate ", " roomIDs) )
+        (x:_)  -> Left ("Error de asignacion, intentas asignar la sala: " ++ x ++ ", que no fue definida\nO hubo un error de formato, no se definio bien SALIDA: \nTus salas definidas son: " ++ (intercalate ", " roomIDs) )
   where
     roomIDs       = map roomID rooms
     referencedIDs = concatMap Map.elems exits
